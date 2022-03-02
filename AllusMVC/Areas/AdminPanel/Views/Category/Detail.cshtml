@@ -1,0 +1,37 @@
+﻿@model Category
+@{
+    ViewData["Title"] = "Detail";
+}
+
+<div class="container">
+    <div class="row mb-5 mt-5">
+        <h1>@Model.Name</h1>
+        @*Product Details*@
+        <div class="mt-1 col-12 d-flex flex-column justify-content-start align-item-center" style="color:black;">
+
+            @if (Model.IsMain)
+            {
+                @*Product Image*@
+                <div class="mt-1">
+                    <div>
+                        <img src="~/assets/images//@Model.Image" class="img-fluid"><img />
+                    </div>
+                    <p class="mt-3">Children: </p>
+                    <ul>
+                        @foreach (var item in Model.Children)
+                        {
+                            <li>@item.Name</li>
+                        }
+                    </ul>
+                </div>
+
+            }
+            else
+            {
+                <p>Parent: @Model.Parent.Name</p>
+            }
+            <h6>IsDeleted: @Model.IsDeleted</h6>
+            <h6>IsMain: @Model.IsMain</h6>
+        </div>
+    </div>
+</div>

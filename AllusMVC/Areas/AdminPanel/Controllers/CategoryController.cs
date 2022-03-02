@@ -6,6 +6,7 @@ using AllusMVC.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AllusMVC.Areas.AdminPanel.Controllers
 {
@@ -238,6 +239,22 @@ namespace AllusMVC.Areas.AdminPanel.Controllers
             await _dbContext.SaveChangesAsync();
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<ActionResult> Detail(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            var category = await _dbContext.Categories
+                .Where(x => x.Id == id && !x.IsDeleted)
+                .Include(x => x.Parent)
+                .Include(x => x.Children.Where(y => !y.IsDeleted))
+                .FirstOrDefaultAsync();
+            if (category == null)
+                return NotFound();
+
+            return View(category);
         }
     }
 }
